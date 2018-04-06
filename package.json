@@ -2,9 +2,9 @@
   "name": "github-geppou",
   "version": "0.1.0",
   "scripts": {
-    "fetch": "yarn build && node src/Main.bs.js",
+    "start": "node index.js",
     "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
+    "watch": "bsb -make-world -w",
     "clean": "bsb -clean-world"
   },
   "keywords": [
@@ -16,6 +16,7 @@
     "bs-platform": "^2.2.2"
   },
   "dependencies": {
-    "github-api": "^3.0.0"
+    "googleapis": "^28.1.0",
+    "node-fetch": "^2.1.2"
   }
 }
