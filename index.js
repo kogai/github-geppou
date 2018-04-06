@@ -23,15 +23,14 @@ const fetchQuery = (query, variables) => {
 
 const fromDay = new Date("2018-03-01");
 const toDay = new Date("2018-03-31");
-console.log(fromDay, toDay);
 
 const query = fs.readFileSync("./Query.gql").toString();
+const user = "kogai";
 
-let count = 0;
 const fetchAll = (xs = [], cursor) => {
   return fetchQuery(query, {
-    login: "kogai",
-    last: 5,
+    login: user,
+    last: 50,
     before: cursor
   }).then(
     ({
@@ -40,17 +39,32 @@ const fetchAll = (xs = [], cursor) => {
       }
     }) => {
       const ys = edges
-        .map(({ node: { title, createdAt } }) => `${createdAt}:${title}`)
-        .concat(xs);
-      if (count > 2) {
-        return Promise.resolve(ys);
+        .filter(({ node: { createdAt } }) => {
+          const d = new Date(createdAt);
+          return (
+            fromDay.getTime() <= d.getTime() && toDay.getTime() >= d.getTime()
+          );
+        })
+        .map(({ node: { title, createdAt, url, author } }) => {
+          const d = new Date(createdAt);
+          const date = `${d.getMonth() + 1}/${d.getDate()}`;
+          return `* ${date}: [${title}](${url}) [@${user}](${author.url})`;
+        });
+      if (
+        ys.length === 0 &&
+        edges.every(({ node: { createdAt } }) => {
+          const d = new Date(createdAt);
+          return fromDay.getTime() >= d.getTime();
+        })
+      ) {
+        return Promise.resolve(ys.concat(xs));
       }
-      count++;
-      return fetchAll(ys, startCursor);
+      console.log("Fetching %dth events...", ys.concat(xs).length);
+      return fetchAll(ys.concat(xs), startCursor);
     }
   );
 };
 
 fetchAll().then(xs => {
-  console.log(xs);
+  console.log(xs.join("\n"));
 });
