@@ -1,18 +1,11 @@
-# Basic Reason Template
+Yet onother GitHub-nippou
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
+* https://github.com/masutaka/github-nippou
+* https://github.com/zenoplex/github-summary
 
-# Build
-```
-npm run build
-```
+## Need
 
-# Build + Watch
-
-```
-npm run start
-```
-
-
-# Editor
-If you use `vscode`, Press `Windows + Shift + B` it will build automatically
+* GITHUB_API_TOKEN
+* pbcopy
+* xsel
+* win-clipboard // https://github.com/sindresorhus/win-clipboard

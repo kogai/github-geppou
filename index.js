@@ -1,5 +1,6 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
+const clipoardy = require("clipboardy");
 const im = require("immutable");
 
 const fetchQuery = (query, variables) => {
@@ -92,6 +93,9 @@ const format = xs =>
     .reduce((acc, v, k) => acc.push(`### ${k}\n\n${v}`), im.List())
     .join("\n\n\n");
 
-fetchAll().then(xs => {
-  console.log(format(xs));
-});
+fetchAll()
+  .then(format)
+  .then(x => {
+    console.log(x);
+    clipoardy.write(x);
+  });
