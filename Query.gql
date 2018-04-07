@@ -11,6 +11,9 @@ query Q($login: String!, $last: Int!, $before: String) {
           url
           repository {
             name
+            owner {
+              login
+            }
           }
           createdAt
           author {

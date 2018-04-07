@@ -1,5 +1,6 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
+const im = require("immutable");
 
 const fetchQuery = (query, variables) => {
   return fetch("https://api.github.com/graphql", {
@@ -30,7 +31,7 @@ const user = "kogai";
 const fetchAll = (xs = [], cursor) => {
   return fetchQuery(query, {
     login: user,
-    last: 50,
+    last: 25,
     before: cursor
   }).then(
     ({
@@ -45,10 +46,14 @@ const fetchAll = (xs = [], cursor) => {
             fromDay.getTime() <= d.getTime() && toDay.getTime() >= d.getTime()
           );
         })
-        .map(({ node: { title, createdAt, url, author } }) => {
-          const d = new Date(createdAt);
-          const date = `${d.getMonth() + 1}/${d.getDate()}`;
-          return `* ${date}: [${title}](${url}) [@${user}](${author.url})`;
+        .map(({ node: { title, createdAt, url, author, repository } }) => {
+          return {
+            title,
+            createdAt,
+            url,
+            author,
+            repository
+          };
         });
       if (
         ys.length === 0 &&
@@ -65,6 +70,28 @@ const fetchAll = (xs = [], cursor) => {
   );
 };
 
+const groupElement = (acc, x) => {
+  const { repository: { name, owner: { login } } } = x;
+  acc[`${login}/${name}`] ? acc : acc;
+};
+
+const formatElement = ({ createdAt, title, url, author, repository }) => {
+  const d = new Date(createdAt);
+  const date = `${d.getMonth() + 1}/${d.getDate()}`;
+  return `* ${date}: [${title}](${url}) [@${author.login}](${author.url})`;
+};
+
+const format = xs =>
+  im
+    .List(xs)
+    .groupBy(({ repository: { name, owner: { login } } }) => {
+      return `${login}/${name}`;
+    })
+    .map((ys, k) => ys.map(formatElement))
+    .map(ys => ys.join("\n"))
+    .reduce((acc, v, k) => acc.push(`### ${k}\n\n${v}`), im.List())
+    .join("\n\n\n");
+
 fetchAll().then(xs => {
-  console.log(xs.join("\n"));
+  console.log(format(xs));
 });

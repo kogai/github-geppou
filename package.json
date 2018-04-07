@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "googleapis": "^28.1.0",
+    "immutable": "^3.8.2",
     "node-fetch": "^2.1.2"
   }
 }
