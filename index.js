@@ -79,7 +79,7 @@ const groupElement = (acc, x) => {
 const formatElement = ({ createdAt, title, url, author, repository }) => {
   const d = new Date(createdAt);
   const date = `${d.getMonth() + 1}/${d.getDate()}`;
-  return `* ${date}: [${title}](${url}) [@${author.login}](${author.url})`;
+  return `* ${date}: [${title}](${url})`;
 };
 
 const format = xs =>
