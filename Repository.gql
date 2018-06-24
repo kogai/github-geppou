@@ -1,0 +1,22 @@
+query Repository($login: String!, $last: Int!, $before: String) {
+  user(login: $login) {
+    repositories(last: $last, before: $before) {
+      pageInfo {
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          name
+          url
+          isFork
+          isPrivate
+          owner {
+            login
+          }
+          createdAt
+        }
+      }
+    }
+  }
+}

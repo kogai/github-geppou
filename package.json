@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node index.js",
     "build": "bsb -make-world",
+    "fmt": "prettier index.js --write",
     "watch": "bsb -make-world -w",
     "clean": "bsb -clean-world"
   },
@@ -13,7 +14,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "bs-platform": "^2.2.2"
+    "bs-platform": "^2.2.2",
+    "prettier": "^1.13.5"
   },
   "dependencies": {
     "clipboardy": "^1.2.3",
