@@ -1,4 +1,4 @@
-query Q($login: String!, $last: Int!, $before: String) {
+query PullRequest($login: String!, $last: Int!, $before: String) {
   user(login: $login) {
     pullRequests(last: $last, before: $before) {
       pageInfo {
