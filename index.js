@@ -23,6 +23,13 @@ const fetchQuery = (query, variables) => {
     });
 };
 
+const isUptoDate = (xs, edges) => xs.length === 0 &&
+  edges.every(({
+    node: {
+      createdAt
+    }
+  }) => fromDay.getTime() >= new Date(createdAt).getTime());
+
 const fromDay = new Date("2018-06-01");
 const toDay = new Date("2018-06-31");
 
@@ -77,17 +84,7 @@ const fetchPullRequests = (query, xs = [], cursor = undefined) => {
             repository
           };
         });
-      if (
-        ys.length === 0 &&
-        edges.every(({
-          node: {
-            createdAt
-          }
-        }) => {
-          const d = new Date(createdAt);
-          return fromDay.getTime() >= d.getTime();
-        })
-      ) {
+      if (isUptoDate(ys, edges)) {
         return Promise.resolve(ys.concat(xs));
       }
       console.log(
@@ -148,17 +145,7 @@ const fetchRepositories = (query, xs = [], cursor = undefined) =>
           owner,
           url
         }));
-      if (
-        ys.length === 0 &&
-        edges.every(({
-          node: {
-            createdAt
-          }
-        }) => {
-          const d = new Date(createdAt);
-          return fromDay.getTime() >= d.getTime();
-        })
-      ) {
+      if (isUptoDate(ys, edges)) {
         return Promise.resolve(ys.concat(xs));
       }
       console.log(
