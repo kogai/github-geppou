@@ -1,4 +1,4 @@
-Yet onother GitHub-nippou
+Yet another GitHub-nippou
 
 * https://github.com/masutaka/github-nippou
 * https://github.com/zenoplex/github-summary
